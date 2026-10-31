@@ -3,8 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f6f1e8" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#17150f" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f1e8">
+  <script>
+    // Apply saved theme, typeface and size before first paint
+    try { const p = JSON.parse(localStorage.getItem("dt:prefs") || "{}"), r = document.documentElement;
+      r.dataset.theme = p.theme || "auto"; r.dataset.font = p.font || "serif"; r.style.setProperty("--scale", p.size || 1); } catch {}
+  </script>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Daily Ten">

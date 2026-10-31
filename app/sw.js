@@ -1,5 +1,5 @@
 // Offline support: app shell from cache; books from network with cached fallback, so read days work offline
-const CACHE = "daily-ten-v1";
+const CACHE = "daily-ten-v2";
 const SHELL = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "icon.svg"];
 
 self.addEventListener("install", (e) => {
