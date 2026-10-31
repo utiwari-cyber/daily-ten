@@ -1,5 +1,5 @@
-// Offline support: app shell from cache; books from network with cached fallback, so read days work offline
-const CACHE = "daily-ten-v2";
+// Offline support: everything from the network first, with the cached copy as the offline fallback
+const CACHE = "daily-ten-v3";
 const SHELL = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "icon.svg"];
 
 self.addEventListener("install", (e) => {
@@ -13,15 +13,8 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);
   if (url.origin !== location.origin) return; // covers load straight from Open Library
-  if (url.pathname.includes("/days/")) {
-    e.respondWith(fetch(e.request).then((res) => {
-      if (res.ok) caches.open(CACHE).then((c) => c.put(e.request, res.clone()));
-      return res;
-    }).catch(() => caches.match(e.request)));
-    return;
-  }
-  e.respondWith(caches.open(CACHE).then((c) => c.match(e.request).then((hit) => {
-    const fresh = fetch(e.request).then((res) => { if (res.ok) c.put(e.request, res.clone()); return res; });
-    return hit || fresh;
-  })));
+  e.respondWith(fetch(e.request).then((res) => {
+    if (res.ok) caches.open(CACHE).then((c) => c.put(e.request, res.clone()));
+    return res;
+  }).catch(() => caches.match(e.request)));
 });
