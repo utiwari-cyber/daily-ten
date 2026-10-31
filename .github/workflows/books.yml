@@ -1,0 +1,59 @@
+name: Daily books
+
+on:
+  schedule:
+    - cron: "41 */3 * * *"   # every 3 hours; the first run after midnight Melbourne writes the day, later runs fill any gaps
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["app/**", "generate.py", "books.txt", ".github/workflows/books.yml", "!app/days/**"]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: books
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Write today's summaries
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python3 generate.py
+
+      # Each day is committed so it is only generated once and stays in the archive
+      - name: Save new days
+        run: |
+          git add app/days
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Books for $(TZ=Australia/Melbourne date +%F)"
+            git push
+          fi
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: app
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

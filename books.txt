@@ -1,0 +1,503 @@
+# genre | title | author | year
+# One book from each of the 10 genres is served per day; each genre cycles through its own list.
+
+self_help | How to Win Friends and Influence People | Dale Carnegie | 1936
+self_help | The 7 Habits of Highly Effective People | Stephen R. Covey | 1989
+self_help | Atomic Habits | James Clear | 2018
+self_help | The Power of Habit | Charles Duhigg | 2012
+self_help | Feeling Good | David D. Burns | 1980
+self_help | The Subtle Art of Not Giving a F*ck | Mark Manson | 2016
+self_help | Getting Things Done | David Allen | 2001
+self_help | Deep Work | Cal Newport | 2016
+self_help | Essentialism | Greg McKeown | 2014
+self_help | The Four Agreements | Don Miguel Ruiz | 1997
+self_help | The Power of Now | Eckhart Tolle | 1997
+self_help | Daring Greatly | Brené Brown | 2012
+self_help | The Gifts of Imperfection | Brené Brown | 2010
+self_help | The Courage to Be Disliked | Ichiro Kishimi and Fumitake Koga | 2013
+self_help | Ikigai | Héctor García and Francesc Miralles | 2016
+self_help | Can't Hurt Me | David Goggins | 2018
+self_help | The 5 Second Rule | Mel Robbins | 2017
+self_help | Eat That Frog! | Brian Tracy | 2001
+self_help | The Miracle Morning | Hal Elrod | 2012
+self_help | Think and Grow Rich | Napoleon Hill | 1937
+self_help | The Magic of Thinking Big | David J. Schwartz | 1959
+self_help | Awaken the Giant Within | Tony Robbins | 1991
+self_help | Crucial Conversations | Kerry Patterson, Joseph Grenny, Ron McMillan and Al Switzler | 2002
+self_help | Nonviolent Communication | Marshall B. Rosenberg | 1999
+self_help | Attached | Amir Levine and Rachel Heller | 2010
+self_help | The Five Love Languages | Gary Chapman | 1992
+self_help | Boundaries | Henry Cloud and John Townsend | 1992
+self_help | Digital Minimalism | Cal Newport | 2019
+self_help | Indistractable | Nir Eyal | 2019
+self_help | Four Thousand Weeks | Oliver Burkeman | 2021
+self_help | The Now Habit | Neil Fiore | 1988
+self_help | Make Time | Jake Knapp and John Zeratsky | 2018
+self_help | Designing Your Life | Bill Burnett and Dave Evans | 2016
+self_help | The Art of Possibility | Rosamund Stone Zander and Benjamin Zander | 2000
+self_help | The Willpower Instinct | Kelly McGonigal | 2011
+self_help | The Happiness Trap | Russ Harris | 2007
+self_help | Never Split the Difference | Chris Voss | 2016
+self_help | Getting to Yes | Roger Fisher and William Ury | 1981
+self_help | The Obstacle Is the Way | Ryan Holiday | 2014
+self_help | Ego Is the Enemy | Ryan Holiday | 2016
+self_help | Stillness Is the Key | Ryan Holiday | 2019
+self_help | The Untethered Soul | Michael A. Singer | 2007
+self_help | Radical Acceptance | Tara Brach | 2003
+self_help | Wherever You Go, There You Are | Jon Kabat-Zinn | 1994
+self_help | Self-Compassion | Kristin Neff | 2011
+self_help | The War of Art | Steven Pressfield | 2002
+self_help | Big Magic | Elizabeth Gilbert | 2015
+self_help | The Artist's Way | Julia Cameron | 1992
+self_help | Tiny Habits | BJ Fogg | 2019
+self_help | The ONE Thing | Gary Keller and Jay Papasan | 2013
+self_help | Hyperfocus | Chris Bailey | 2018
+
+philosophy | Meditations | Marcus Aurelius | c. 180
+philosophy | Letters from a Stoic | Seneca | c. 65
+philosophy | The Enchiridion | Epictetus | c. 125
+philosophy | The Republic | Plato | c. 375 BC
+philosophy | Apology | Plato | c. 399 BC
+philosophy | Nicomachean Ethics | Aristotle | c. 340 BC
+philosophy | Tao Te Ching | Laozi | c. 400 BC
+philosophy | The Analects | Confucius | c. 475 BC
+philosophy | The Art of War | Sun Tzu | c. 500 BC
+philosophy | Beyond Good and Evil | Friedrich Nietzsche | 1886
+philosophy | Thus Spoke Zarathustra | Friedrich Nietzsche | 1883
+philosophy | The Myth of Sisyphus | Albert Camus | 1942
+philosophy | Existentialism Is a Humanism | Jean-Paul Sartre | 1946
+philosophy | The Prince | Niccolò Machiavelli | 1532
+philosophy | Leviathan | Thomas Hobbes | 1651
+philosophy | On Liberty | John Stuart Mill | 1859
+philosophy | The Social Contract | Jean-Jacques Rousseau | 1762
+philosophy | Groundwork of the Metaphysics of Morals | Immanuel Kant | 1785
+philosophy | Meditations on First Philosophy | René Descartes | 1641
+philosophy | An Enquiry Concerning Human Understanding | David Hume | 1748
+philosophy | The Consolation of Philosophy | Boethius | 524
+philosophy | Essays | Michel de Montaigne | 1580
+philosophy | Pensées | Blaise Pascal | 1670
+philosophy | Walden | Henry David Thoreau | 1854
+philosophy | Self-Reliance and Other Essays | Ralph Waldo Emerson | 1841
+philosophy | The Bhagavad Gita | Vyasa (traditional) | c. 200 BC
+philosophy | The Dhammapada | The Buddha (traditional) | c. 300 BC
+philosophy | A Theory of Justice | John Rawls | 1971
+philosophy | The Second Sex | Simone de Beauvoir | 1949
+philosophy | The Human Condition | Hannah Arendt | 1958
+philosophy | Eichmann in Jerusalem | Hannah Arendt | 1963
+philosophy | The Open Society and Its Enemies | Karl Popper | 1945
+philosophy | The Problems of Philosophy | Bertrand Russell | 1912
+philosophy | The Conquest of Happiness | Bertrand Russell | 1930
+philosophy | Zen and the Art of Motorcycle Maintenance | Robert M. Pirsig | 1974
+philosophy | The Story of Philosophy | Will Durant | 1926
+philosophy | The Denial of Death | Ernest Becker | 1973
+philosophy | The Art of Loving | Erich Fromm | 1956
+philosophy | To Have or to Be? | Erich Fromm | 1976
+philosophy | I and Thou | Martin Buber | 1923
+philosophy | The Courage to Be | Paul Tillich | 1952
+philosophy | Justice: What's the Right Thing to Do? | Michael J. Sandel | 2009
+philosophy | The Tyranny of Merit | Michael J. Sandel | 2020
+philosophy | How to Live: A Life of Montaigne | Sarah Bakewell | 2010
+philosophy | At the Existentialist Café | Sarah Bakewell | 2016
+philosophy | The Consolations of Philosophy | Alain de Botton | 2000
+philosophy | Status Anxiety | Alain de Botton | 2004
+philosophy | The Wisdom of Insecurity | Alan Watts | 1951
+philosophy | The Way of Zen | Alan Watts | 1957
+philosophy | Zen Mind, Beginner's Mind | Shunryu Suzuki | 1970
+philosophy | The Varieties of Religious Experience | William James | 1902
+philosophy | Free Will | Sam Harris | 2012
+
+current_affairs | The Anxious Generation | Jonathan Haidt | 2024
+current_affairs | Stolen Focus | Johann Hari | 2022
+current_affairs | The Age of Surveillance Capitalism | Shoshana Zuboff | 2019
+current_affairs | The Coming Wave | Mustafa Suleyman | 2023
+current_affairs | Chip War | Chris Miller | 2022
+current_affairs | The Uninhabitable Earth | David Wallace-Wells | 2019
+current_affairs | How to Avoid a Climate Disaster | Bill Gates | 2021
+current_affairs | Not the End of the World | Hannah Ritchie | 2024
+current_affairs | Factfulness | Hans Rosling, Ola Rosling and Anna Rosling Rönnlund | 2018
+current_affairs | Enlightenment Now | Steven Pinker | 2018
+current_affairs | Prisoners of Geography | Tim Marshall | 2015
+current_affairs | The Power of Geography | Tim Marshall | 2021
+current_affairs | The Revenge of Geography | Robert D. Kaplan | 2012
+current_affairs | How Democracies Die | Steven Levitsky and Daniel Ziblatt | 2018
+current_affairs | Tyranny of the Minority | Steven Levitsky and Daniel Ziblatt | 2023
+current_affairs | On Tyranny | Timothy Snyder | 2017
+current_affairs | Deaths of Despair and the Future of Capitalism | Anne Case and Angus Deaton | 2020
+current_affairs | Evicted | Matthew Desmond | 2016
+current_affairs | Poverty, by America | Matthew Desmond | 2023
+current_affairs | The New Jim Crow | Michelle Alexander | 2010
+current_affairs | Caste | Isabel Wilkerson | 2020
+current_affairs | Between the World and Me | Ta-Nehisi Coates | 2015
+current_affairs | Hillbilly Elegy | J. D. Vance | 2016
+current_affairs | Superintelligence | Nick Bostrom | 2014
+current_affairs | Human Compatible | Stuart Russell | 2019
+current_affairs | The Alignment Problem | Brian Christian | 2020
+current_affairs | Co-Intelligence | Ethan Mollick | 2024
+current_affairs | Weapons of Math Destruction | Cathy O'Neil | 2016
+current_affairs | The Shallows | Nicholas Carr | 2010
+current_affairs | Amusing Ourselves to Death | Neil Postman | 1985
+current_affairs | The Sixth Extinction | Elizabeth Kolbert | 2014
+current_affairs | Silent Spring | Rachel Carson | 1962
+current_affairs | The End of History and the Last Man | Francis Fukuyama | 1992
+current_affairs | The Clash of Civilizations | Samuel P. Huntington | 1996
+current_affairs | Destined for War | Graham Allison | 2017
+current_affairs | The World: A Brief Introduction | Richard Haass | 2020
+current_affairs | Invisible Women | Caroline Criado Perez | 2019
+current_affairs | Fault Lines | Raghuram G. Rajan | 2010
+current_affairs | Breaking the Mould | Raghuram G. Rajan and Rohit Lamba | 2023
+current_affairs | The Idea of India | Sunil Khilnani | 1997
+current_affairs | The Lucky Country | Donald Horne | 1964
+current_affairs | Capital in the Twenty-First Century | Thomas Piketty | 2013
+current_affairs | The Price of Inequality | Joseph E. Stiglitz | 2012
+current_affairs | Globalization and Its Discontents | Joseph E. Stiglitz | 2002
+current_affairs | The Chaos Machine | Max Fisher | 2022
+current_affairs | Abundance | Ezra Klein and Derek Thompson | 2025
+current_affairs | This Changes Everything | Naomi Klein | 2014
+current_affairs | 21 Lessons for the 21st Century | Yuval Noah Harari | 2018
+current_affairs | Homo Deus | Yuval Noah Harari | 2015
+current_affairs | Careless People | Sarah Wynn-Williams | 2025
+
+finance | The Intelligent Investor | Benjamin Graham | 1949
+finance | The Psychology of Money | Morgan Housel | 2020
+finance | Rich Dad Poor Dad | Robert T. Kiyosaki | 1997
+finance | The Richest Man in Babylon | George S. Clason | 1926
+finance | Your Money or Your Life | Vicki Robin and Joe Dominguez | 1992
+finance | I Will Teach You to Be Rich | Ramit Sethi | 2009
+finance | The Millionaire Next Door | Thomas J. Stanley and William D. Danko | 1996
+finance | A Random Walk Down Wall Street | Burton G. Malkiel | 1973
+finance | The Little Book of Common Sense Investing | John C. Bogle | 2007
+finance | Common Stocks and Uncommon Profits | Philip A. Fisher | 1958
+finance | One Up on Wall Street | Peter Lynch | 1989
+finance | The Most Important Thing | Howard Marks | 2011
+finance | Mastering the Market Cycle | Howard Marks | 2018
+finance | The Essays of Warren Buffett | Warren Buffett and Lawrence A. Cunningham | 1997
+finance | Poor Charlie's Almanack | Charles T. Munger | 2005
+finance | Fooled by Randomness | Nassim Nicholas Taleb | 2001
+finance | The Black Swan | Nassim Nicholas Taleb | 2007
+finance | Antifragile | Nassim Nicholas Taleb | 2012
+finance | Against the Gods | Peter L. Bernstein | 1996
+finance | The Big Short | Michael Lewis | 2010
+finance | Liar's Poker | Michael Lewis | 1989
+finance | Flash Boys | Michael Lewis | 2014
+finance | When Genius Failed | Roger Lowenstein | 2000
+finance | Too Big to Fail | Andrew Ross Sorkin | 2009
+finance | The Ascent of Money | Niall Ferguson | 2008
+finance | Lords of Finance | Liaquat Ahamed | 2009
+finance | This Time Is Different | Carmen M. Reinhart and Kenneth S. Rogoff | 2009
+finance | Extraordinary Popular Delusions and the Madness of Crowds | Charles Mackay | 1841
+finance | Manias, Panics, and Crashes | Charles P. Kindleberger | 1978
+finance | The Simple Path to Wealth | JL Collins | 2016
+finance | Die with Zero | Bill Perkins | 2020
+finance | The Barefoot Investor | Scott Pape | 2016
+finance | Money: Master the Game | Tony Robbins | 2014
+finance | The Total Money Makeover | Dave Ramsey | 2003
+finance | The Little Book That Still Beats the Market | Joel Greenblatt | 2010
+finance | You Can Be a Stock Market Genius | Joel Greenblatt | 1997
+finance | Same as Ever | Morgan Housel | 2023
+finance | The Dhandho Investor | Mohnish Pabrai | 2007
+finance | Reminiscences of a Stock Operator | Edwin Lefèvre | 1923
+finance | Market Wizards | Jack D. Schwager | 1989
+finance | The Man Who Solved the Market | Gregory Zuckerman | 2019
+finance | Principles for Dealing with the Changing World Order | Ray Dalio | 2021
+finance | Debt: The First 5,000 Years | David Graeber | 2011
+finance | The Wealthy Barber | David Chilton | 1989
+finance | Richer, Wiser, Happier | William Green | 2021
+finance | The Bogleheads' Guide to Investing | Taylor Larimore, Mel Lindauer and Michael LeBoeuf | 2006
+finance | Thinking in Bets | Annie Duke | 2018
+finance | The Undercover Economist | Tim Harford | 2005
+
+growth | Man's Search for Meaning | Viktor E. Frankl | 1946
+growth | Mindset | Carol S. Dweck | 2006
+growth | Grit | Angela Duckworth | 2016
+growth | The Road Less Traveled | M. Scott Peck | 1978
+growth | Peak | Anders Ericsson and Robert Pool | 2016
+growth | Range | David Epstein | 2019
+growth | Mastery | Robert Greene | 2012
+growth | The 48 Laws of Power | Robert Greene | 1998
+growth | The Laws of Human Nature | Robert Greene | 2018
+growth | So Good They Can't Ignore You | Cal Newport | 2012
+growth | Flow | Mihaly Csikszentmihalyi | 1990
+growth | Drive | Daniel H. Pink | 2009
+growth | When | Daniel H. Pink | 2018
+growth | The Power of Regret | Daniel H. Pink | 2022
+growth | Hidden Potential | Adam Grant | 2023
+growth | Think Again | Adam Grant | 2021
+growth | Give and Take | Adam Grant | 2013
+growth | Originals | Adam Grant | 2016
+growth | The Almanack of Naval Ravikant | Eric Jorgenson | 2020
+growth | Tools of Titans | Tim Ferriss | 2016
+growth | The 4-Hour Workweek | Tim Ferriss | 2007
+growth | Show Your Work! | Austin Kleon | 2014
+growth | Steal Like an Artist | Austin Kleon | 2012
+growth | Ultralearning | Scott H. Young | 2019
+growth | Make It Stick | Peter C. Brown, Henry L. Roediger III and Mark A. McDaniel | 2014
+growth | A Mind for Numbers | Barbara Oakley | 2014
+growth | The Talent Code | Daniel Coyle | 2009
+growth | Outliers | Malcolm Gladwell | 2008
+growth | Tuesdays with Morrie | Mitch Albom | 1997
+growth | The Last Lecture | Randy Pausch | 2008
+growth | Being Mortal | Atul Gawande | 2014
+growth | The Top Five Regrets of the Dying | Bronnie Ware | 2011
+growth | The Second Mountain | David Brooks | 2019
+growth | The Road to Character | David Brooks | 2015
+growth | How Will You Measure Your Life? | Clayton M. Christensen | 2012
+growth | Build the Life You Want | Arthur C. Brooks and Oprah Winfrey | 2023
+growth | From Strength to Strength | Arthur C. Brooks | 2022
+growth | The Defining Decade | Meg Jay | 2012
+growth | Option B | Sheryl Sandberg and Adam Grant | 2017
+growth | The Daily Stoic | Ryan Holiday and Stephen Hanselman | 2016
+growth | Emotional Agility | Susan David | 2016
+growth | Rest | Alex Soojung-Kim Pang | 2016
+growth | The Pathless Path | Paul Millerd | 2022
+growth | Lean In | Sheryl Sandberg | 2013
+growth | The Art of Learning | Josh Waitzkin | 2007
+growth | Learning How to Learn | Barbara Oakley and Terrence Sejnowski | 2018
+growth | Bird by Bird | Anne Lamott | 1994
+growth | On Writing | Stephen King | 2000
+
+history | Sapiens | Yuval Noah Harari | 2011
+history | Guns, Germs, and Steel | Jared Diamond | 1997
+history | Collapse | Jared Diamond | 2005
+history | Why Nations Fail | Daron Acemoglu and James A. Robinson | 2012
+history | The Silk Roads | Peter Frankopan | 2015
+history | The Better Angels of Our Nature | Steven Pinker | 2011
+history | SPQR | Mary Beard | 2015
+history | The Rise and Fall of the Third Reich | William L. Shirer | 1960
+history | The Guns of August | Barbara W. Tuchman | 1962
+history | A Distant Mirror | Barbara W. Tuchman | 1978
+history | The Histories | Herodotus | c. 430 BC
+history | History of the Peloponnesian War | Thucydides | c. 400 BC
+history | Team of Rivals | Doris Kearns Goodwin | 2005
+history | 1491 | Charles C. Mann | 2005
+history | 1493 | Charles C. Mann | 2011
+history | The Wright Brothers | David McCullough | 2015
+history | 1776 | David McCullough | 2005
+history | Postwar | Tony Judt | 2005
+history | The Making of the Atomic Bomb | Richard Rhodes | 1986
+history | India After Gandhi | Ramachandra Guha | 2007
+history | The Anarchy | William Dalrymple | 2019
+history | The Golden Road | William Dalrymple | 2024
+history | Inglorious Empire | Shashi Tharoor | 2016
+history | Freedom at Midnight | Larry Collins and Dominique Lapierre | 1975
+history | The Discovery of India | Jawaharlal Nehru | 1946
+history | The Fatal Shore | Robert Hughes | 1986
+history | Embracing Defeat | John W. Dower | 1999
+history | The Making of Modern Japan | Marius B. Jansen | 2000
+history | Mao's Great Famine | Frank Dikötter | 2010
+history | The Splendid and the Vile | Erik Larson | 2020
+history | The Devil in the White City | Erik Larson | 2003
+history | Genghis Khan and the Making of the Modern World | Jack Weatherford | 2004
+history | The Warmth of Other Suns | Isabel Wilkerson | 2010
+history | A People's History of the United States | Howard Zinn | 1980
+history | Bury My Heart at Wounded Knee | Dee Brown | 1970
+history | The Origins of Totalitarianism | Hannah Arendt | 1951
+history | Humankind | Rutger Bregman | 2019
+history | The Dawn of Everything | David Graeber and David Wengrow | 2021
+history | Bloodlands | Timothy Snyder | 2010
+history | The Second World War | Antony Beevor | 2012
+history | Stalingrad | Antony Beevor | 1998
+history | The Rise and Fall of the Great Powers | Paul Kennedy | 1987
+history | Empire of the Summer Moon | S. C. Gwynne | 2010
+history | Destiny Disrupted | Tamim Ansary | 2009
+history | The Square and the Tower | Niall Ferguson | 2017
+history | Dead Wake | Erik Larson | 2015
+history | The Swerve | Stephen Greenblatt | 2011
+history | Salt: A World History | Mark Kurlansky | 2002
+
+science | A Brief History of Time | Stephen Hawking | 1988
+science | Cosmos | Carl Sagan | 1980
+science | Pale Blue Dot | Carl Sagan | 1994
+science | The Demon-Haunted World | Carl Sagan | 1995
+science | The Selfish Gene | Richard Dawkins | 1976
+science | The Blind Watchmaker | Richard Dawkins | 1986
+science | The Gene | Siddhartha Mukherjee | 2016
+science | The Emperor of All Maladies | Siddhartha Mukherjee | 2010
+science | The Song of the Cell | Siddhartha Mukherjee | 2022
+science | A Short History of Nearly Everything | Bill Bryson | 2003
+science | The Body | Bill Bryson | 2019
+science | Why We Sleep | Matthew Walker | 2017
+science | The Immortal Life of Henrietta Lacks | Rebecca Skloot | 2010
+science | The Structure of Scientific Revolutions | Thomas S. Kuhn | 1962
+science | On the Origin of Species | Charles Darwin | 1859
+science | The Double Helix | James D. Watson | 1968
+science | Seven Brief Lessons on Physics | Carlo Rovelli | 2014
+science | The Order of Time | Carlo Rovelli | 2017
+science | Helgoland | Carlo Rovelli | 2020
+science | The Elegant Universe | Brian Greene | 1999
+science | Astrophysics for People in a Hurry | Neil deGrasse Tyson | 2017
+science | The Hidden Life of Trees | Peter Wohlleben | 2015
+science | Entangled Life | Merlin Sheldrake | 2020
+science | An Immense World | Ed Yong | 2022
+science | I Contain Multitudes | Ed Yong | 2016
+science | The Code Breaker | Walter Isaacson | 2021
+science | Why Zebras Don't Get Ulcers | Robert M. Sapolsky | 1994
+science | Determined | Robert M. Sapolsky | 2023
+science | Thinking in Systems | Donella H. Meadows | 2008
+science | Gödel, Escher, Bach | Douglas R. Hofstadter | 1979
+science | The Information | James Gleick | 2011
+science | Chaos | James Gleick | 1987
+science | Outlive | Peter Attia with Bill Gifford | 2023
+science | Breath | James Nestor | 2020
+science | The Vital Question | Nick Lane | 2015
+science | Something Deeply Hidden | Sean Carroll | 2019
+science | The Big Picture | Sean Carroll | 2016
+science | What If? | Randall Munroe | 2014
+science | The Signal and the Noise | Nate Silver | 2012
+science | How Not to Be Wrong | Jordan Ellenberg | 2014
+science | The Ascent of Man | Jacob Bronowski | 1973
+science | Being You | Anil Seth | 2021
+science | The Brain That Changes Itself | Norman Doidge | 2007
+science | Spillover | David Quammen | 2012
+science | The Hot Zone | Richard Preston | 1994
+science | The Drunkard's Walk | Leonard Mlodinow | 2008
+science | The Disappearing Spoon | Sam Kean | 2010
+science | The Fabric of the Cosmos | Brian Greene | 2004
+
+psychology | Thinking, Fast and Slow | Daniel Kahneman | 2011
+psychology | Noise | Daniel Kahneman, Olivier Sibony and Cass R. Sunstein | 2021
+psychology | Influence | Robert B. Cialdini | 1984
+psychology | Pre-Suasion | Robert B. Cialdini | 2016
+psychology | Predictably Irrational | Dan Ariely | 2008
+psychology | Nudge | Richard H. Thaler and Cass R. Sunstein | 2008
+psychology | Misbehaving | Richard H. Thaler | 2015
+psychology | The Righteous Mind | Jonathan Haidt | 2012
+psychology | The Happiness Hypothesis | Jonathan Haidt | 2006
+psychology | Stumbling on Happiness | Daniel Gilbert | 2006
+psychology | Quiet | Susan Cain | 2012
+psychology | Emotional Intelligence | Daniel Goleman | 1995
+psychology | The Body Keeps the Score | Bessel van der Kolk | 2014
+psychology | The Myth of Normal | Gabor Maté with Daniel Maté | 2022
+psychology | In the Realm of Hungry Ghosts | Gabor Maté | 2008
+psychology | Learned Optimism | Martin E. P. Seligman | 1990
+psychology | Flourish | Martin E. P. Seligman | 2011
+psychology | Blink | Malcolm Gladwell | 2005
+psychology | Talking to Strangers | Malcolm Gladwell | 2019
+psychology | The Tipping Point | Malcolm Gladwell | 2000
+psychology | Subliminal | Leonard Mlodinow | 2012
+psychology | Mistakes Were Made (But Not by Me) | Carol Tavris and Elliot Aronson | 2007
+psychology | The Social Animal | Elliot Aronson | 1972
+psychology | Obedience to Authority | Stanley Milgram | 1974
+psychology | Scarcity | Sendhil Mullainathan and Eldar Shafir | 2013
+psychology | The Paradox of Choice | Barry Schwartz | 2004
+psychology | Superforecasting | Philip E. Tetlock and Dan Gardner | 2015
+psychology | Lost Connections | Johann Hari | 2018
+psychology | Maybe You Should Talk to Someone | Lori Gottlieb | 2019
+psychology | The Elephant in the Brain | Kevin Simler and Robin Hanson | 2018
+psychology | Incognito | David Eagleman | 2011
+psychology | The Undoing Project | Michael Lewis | 2016
+psychology | The Upside of Stress | Kelly McGonigal | 2015
+psychology | Behave | Robert M. Sapolsky | 2017
+psychology | The Man Who Mistook His Wife for a Hat | Oliver Sacks | 1985
+psychology | The Art of Thinking Clearly | Rolf Dobelli | 2011
+psychology | Atlas of the Heart | Brené Brown | 2021
+psychology | Games People Play | Eric Berne | 1964
+psychology | On Becoming a Person | Carl R. Rogers | 1961
+psychology | Motivation and Personality | Abraham H. Maslow | 1954
+psychology | Man and His Symbols | Carl G. Jung | 1964
+psychology | The Gift of Fear | Gavin de Becker | 1997
+psychology | Why We Do What We Do | Edward L. Deci with Richard Flaste | 1995
+psychology | Hold Me Tight | Sue Johnson | 2008
+psychology | The Molecule of More | Daniel Z. Lieberman and Michael E. Long | 2018
+psychology | Dopamine Nation | Anna Lembke | 2021
+psychology | Mindwise | Nicholas Epley | 2014
+psychology | Thinking in Pictures | Temple Grandin | 1995
+
+biography | The Diary of a Young Girl | Anne Frank | 1947
+biography | Long Walk to Freedom | Nelson Mandela | 1994
+biography | The Autobiography of Malcolm X | Malcolm X with Alex Haley | 1965
+biography | Steve Jobs | Walter Isaacson | 2011
+biography | Einstein: His Life and Universe | Walter Isaacson | 2007
+biography | Leonardo da Vinci | Walter Isaacson | 2017
+biography | Benjamin Franklin: An American Life | Walter Isaacson | 2003
+biography | Elon Musk | Walter Isaacson | 2023
+biography | Educated | Tara Westover | 2018
+biography | Becoming | Michelle Obama | 2018
+biography | I Know Why the Caged Bird Sings | Maya Angelou | 1969
+biography | The Story of My Experiments with Truth | M. K. Gandhi | 1927
+biography | Wings of Fire | A. P. J. Abdul Kalam with Arun Tiwari | 1999
+biography | Shoe Dog | Phil Knight | 2016
+biography | Surely You're Joking, Mr. Feynman! | Richard P. Feynman | 1985
+biography | When Breath Becomes Air | Paul Kalanithi | 2016
+biography | Born a Crime | Trevor Noah | 2016
+biography | Night | Elie Wiesel | 1956
+biography | Alexander Hamilton | Ron Chernow | 2004
+biography | Titan: The Life of John D. Rockefeller, Sr. | Ron Chernow | 1998
+biography | Grant | Ron Chernow | 2017
+biography | Washington: A Life | Ron Chernow | 2010
+biography | The Power Broker | Robert A. Caro | 1974
+biography | Churchill: Walking with Destiny | Andrew Roberts | 2018
+biography | Napoleon: A Life | Andrew Roberts | 2014
+biography | Wild Swans | Jung Chang | 1991
+biography | Open | Andre Agassi | 2009
+biography | The Snowball | Alice Schroeder | 2008
+biography | Into Thin Air | Jon Krakauer | 1997
+biography | Into the Wild | Jon Krakauer | 1996
+biography | Unbroken | Laura Hillenbrand | 2010
+biography | The Glass Castle | Jeannette Walls | 2005
+biography | Kitchen Confidential | Anthony Bourdain | 2000
+biography | A Promised Land | Barack Obama | 2020
+biography | Dreams from My Father | Barack Obama | 1995
+biography | American Prometheus | Kai Bird and Martin J. Sherwin | 2005
+biography | Madame Curie | Ève Curie | 1937
+biography | The Man Who Knew Infinity | Robert Kanigel | 1991
+biography | Playing It My Way | Sachin Tendulkar with Boria Majumdar | 2014
+biography | I Am Malala | Malala Yousafzai with Christina Lamb | 2013
+biography | Crying in H Mart | Michelle Zauner | 2021
+biography | Know My Name | Chanel Miller | 2019
+biography | Greenlights | Matthew McConaughey | 2020
+biography | Endurance: Shackleton's Incredible Voyage | Alfred Lansing | 1959
+biography | The Boys in the Boat | Daniel James Brown | 2013
+biography | Moneyball | Michael Lewis | 2003
+biography | Just Kids | Patti Smith | 2010
+biography | The Wager | David Grann | 2023
+
+business | Good to Great | Jim Collins | 2001
+business | Built to Last | Jim Collins and Jerry I. Porras | 1994
+business | Zero to One | Peter Thiel with Blake Masters | 2014
+business | The Lean Startup | Eric Ries | 2011
+business | The Innovator's Dilemma | Clayton M. Christensen | 1997
+business | The Hard Thing About Hard Things | Ben Horowitz | 2014
+business | High Output Management | Andrew S. Grove | 1983
+business | Only the Paranoid Survive | Andrew S. Grove | 1996
+business | The Effective Executive | Peter F. Drucker | 1967
+business | Start with Why | Simon Sinek | 2009
+business | Leaders Eat Last | Simon Sinek | 2014
+business | The Five Dysfunctions of a Team | Patrick Lencioni | 2002
+business | Radical Candor | Kim Scott | 2017
+business | No Rules Rules | Reed Hastings and Erin Meyer | 2020
+business | The Culture Map | Erin Meyer | 2014
+business | The Culture Code | Daniel Coyle | 2018
+business | Measure What Matters | John Doerr | 2018
+business | Principles | Ray Dalio | 2017
+business | Blue Ocean Strategy | W. Chan Kim and Renée Mauborgne | 2005
+business | Competitive Strategy | Michael E. Porter | 1980
+business | Good Strategy Bad Strategy | Richard P. Rumelt | 2011
+business | Playing to Win | A. G. Lafley and Roger L. Martin | 2013
+business | The Goal | Eliyahu M. Goldratt and Jeff Cox | 1984
+business | Crossing the Chasm | Geoffrey A. Moore | 1991
+business | Hooked | Nir Eyal | 2014
+business | Contagious | Jonah Berger | 2013
+business | Made to Stick | Chip Heath and Dan Heath | 2007
+business | Switch | Chip Heath and Dan Heath | 2010
+business | Decisive | Chip Heath and Dan Heath | 2013
+business | Freakonomics | Steven D. Levitt and Stephen J. Dubner | 2005
+business | The Everything Store | Brad Stone | 2013
+business | Bad Blood | John Carreyrou | 2018
+business | Super Pumped | Mike Isaac | 2019
+business | Barbarians at the Gate | Bryan Burrough and John Helyar | 1989
+business | The Ride of a Lifetime | Robert Iger | 2019
+business | Creativity, Inc. | Ed Catmull with Amy Wallace | 2014
+business | Grinding It Out | Ray Kroc with Robert Anderson | 1977
+business | Sam Walton: Made in America | Sam Walton with John Huey | 1992
+business | The Outsiders | William N. Thorndike Jr. | 2012
+business | Rework | Jason Fried and David Heinemeier Hansson | 2010
+business | The E-Myth Revisited | Michael E. Gerber | 1995
+business | The Mom Test | Rob Fitzpatrick | 2013
+business | Working Backwards | Colin Bryar and Bill Carr | 2021
+business | Multipliers | Liz Wiseman | 2010
+business | The Making of a Manager | Julie Zhuo | 2019
+business | 7 Powers | Hamilton Helmer | 2016
+business | The Cold Start Problem | Andrew Chen | 2021
+business | Trillion Dollar Coach | Eric Schmidt, Jonathan Rosenberg and Alan Eagle | 2019
+business | Amp It Up | Frank Slootman | 2022
+business | Thinking Strategically | Avinash K. Dixit and Barry J. Nalebuff | 1991
