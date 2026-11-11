@@ -2,7 +2,8 @@
 
 Each day folder has index.json mapping book id -> {file, seconds, marks}, where marks[k] is the
 second at which slide k (title page, ten pages, wrap-up) starts, so the app can follow along.
-Books are recorded newest day first until the time budget runs out; later runs pick up the rest.
+Books are recorded newest day first until the deadline (NARRATE_DEADLINE, unix seconds); a book still
+recording then is stopped and later runs pick up the rest. Each book is recorded in its own process.
 """
 import json
 import os
@@ -11,7 +12,7 @@ import subprocess
 import sys
 import time
 import wave
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -20,7 +21,8 @@ DAYS = ROOT / "app" / "days"
 AUDIO = ROOT / "app" / "audio"
 VOICE = "en_US-lessac-high"
 KEEP_DAYS = 14
-BUDGET = float(os.environ.get("NARRATE_MINUTES", "30")) * 60
+DEADLINE = float(os.environ.get("NARRATE_DEADLINE") or time.time() + 30 * 60)
+BOOK_MINUTES = 12  # a book takes roughly this long with all cores busy; don't start one with less time left
 PAUSE = 0.6  # seconds between paragraphs
 
 
@@ -71,13 +73,14 @@ def record(book, mp3):
 
 
 def main():
-    start = time.time()
     keep = {str(date.fromisoformat(max(p.stem for p in DAYS.glob("20*.json"))) - timedelta(days=n)) for n in range(KEEP_DAYS)}
     AUDIO.mkdir(parents=True, exist_ok=True)
     for old in AUDIO.iterdir():
         if old.name not in keep:
             shutil.rmtree(old, ignore_errors=True)
             print(f"dropped {old.name}")
+    for leftover in AUDIO.glob("*/*.wav"):
+        leftover.unlink()
 
     todo = []
     for day in sorted(keep, reverse=True):
@@ -86,40 +89,44 @@ def main():
             continue
         index = AUDIO / day / "index.json"
         done = json.loads(index.read_text()) if index.exists() else {}
-        todo += [(day, b) for b in json.loads(src.read_text())["books"] if b["id"] not in done]
+        todo += [(day, b["id"]) for b in json.loads(src.read_text())["books"] if b["id"] not in done]
     if not todo:
         return print("audio up to date")
+    print(f"{len(todo)} books to record, {int(DEADLINE - time.time()) // 60} min available")
 
     subprocess.run([sys.executable, "-m", "piper.download_voices", "--data-dir", "voices", VOICE], check=True)
-    workers = os.cpu_count() or 2
-    with ProcessPoolExecutor(workers) as pool:
-        pending = {}
-        queue = iter(todo)
+    queue, start = iter(todo), time.time()
 
-        def submit():
-            for day, b in queue:
-                if time.time() - start > BUDGET:
-                    return
-                (AUDIO / day).mkdir(exist_ok=True)
-                pending[pool.submit(record, b, AUDIO / day / f"{b['id']}.mp3")] = (day, b["id"])
+    def work():
+        for day, bid in queue:
+            left = DEADLINE - time.time()
+            if left < BOOK_MINUTES * 60:
                 return
-
-        for _ in range(workers):
-            submit()
-        while pending:
-            fut = next(as_completed(pending))
-            day, bid = pending.pop(fut)
-            if fut.exception():
-                print(f"skipped {day} {bid}: {fut.exception()!r}")
-                submit()
+            try:
+                out = subprocess.run([sys.executable, __file__, day, bid], capture_output=True, text=True, timeout=left, check=True)
+            except subprocess.TimeoutExpired:
+                return print(f"stopped {day} {bid} at the deadline")
+            except subprocess.CalledProcessError as ex:
+                print(f"skipped {day} {bid}: {ex.stderr.strip().splitlines()[-1:]}")
                 continue
             index = AUDIO / day / "index.json"
             done = json.loads(index.read_text()) if index.exists() else {}
-            done[bid] = fut.result()
+            done[bid] = json.loads(out.stdout.strip().splitlines()[-1])
             index.write_text(json.dumps(done))
             print(f"recorded {day} {bid} ({done[bid]['seconds'] // 60} min) at {int(time.time() - start)}s")
-            submit()
+
+    workers = os.cpu_count() or 2
+    with ThreadPoolExecutor(workers) as pool:
+        for _ in range(workers):
+            pool.submit(work)
+
+
+def one(day, bid):
+    """Record a single book (run as a child process so a stuck book can be stopped)."""
+    book = next(b for b in json.loads((DAYS / f"{day}.json").read_text())["books"] if b["id"] == bid)
+    (AUDIO / day).mkdir(parents=True, exist_ok=True)
+    print(json.dumps(record(book, AUDIO / day / f"{bid}.mp3")))
 
 
 if __name__ == "__main__":
-    main()
+    one(*sys.argv[1:]) if len(sys.argv) == 3 else main()

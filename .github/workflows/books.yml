@@ -22,6 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      # Audio recording stops 48 minutes into the job, leaving time to save and publish
+      - run: echo "NARRATE_DEADLINE=$(( $(date +%s) + 48 * 60 ))" >> "$GITHUB_ENV"
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
@@ -58,7 +61,7 @@ jobs:
           command -v ffmpeg || (sudo apt-get update -q && sudo apt-get install -y -q ffmpeg)
           pip install -q piper-tts
           before=$(find app/audio -type f 2>/dev/null | sort | xargs -r md5sum | md5sum)
-          python3 tools/narrate.py
+          python3 -u tools/narrate.py
           after=$(find app/audio -type f | sort | xargs -r md5sum | md5sum)
           if [ "$before" != "$after" ]; then echo "changed=true" >> "$GITHUB_OUTPUT"; fi
           du -sh app/audio
