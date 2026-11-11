@@ -372,6 +372,11 @@ function makePlayer(scroller, getSlide) {
     <select aria-label="Voice"></select>
     <button data-a="close" class="x" aria-label="Close player">×</button>
     <div class="hint" hidden></div>`;
+  // iOS plays web speech on the ringer channel, so Silent mode mutes it. Asking for media playback
+  // (and keeping a silent track running) moves it to the same channel as music.
+  const keepAlive = new Audio("silence.wav");
+  keepAlive.loop = true;
+  keepAlive.setAttribute("playsinline", "");
   const select = bar.querySelector("select");
   const hint = (msg) => { const h = bar.querySelector(".hint"); h.textContent = msg; h.hidden = !msg; };
   const fillVoices = () => {
@@ -422,6 +427,8 @@ function makePlayer(scroller, getSlide) {
     }, 3000);
   }
   async function play() {
+    if (navigator.audioSession) navigator.audioSession.type = "playback";
+    keepAlive.play().catch(() => {});
     playing = true;
     sync();
     const s = getSlide();
@@ -432,6 +439,7 @@ function makePlayer(scroller, getSlide) {
     playing = false;
     token++;
     synth.cancel();
+    keepAlive.pause();
     lock?.release().catch(() => {});
     lock = null;
     sync();

@@ -1,5 +1,5 @@
 // Offline support: everything from the network first, with the cached copy as the offline fallback
-const CACHE = "daily-ten-v5";
+const CACHE = "daily-ten-v6";
 const SHELL = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "icon.svg"];
 
 self.addEventListener("install", (e) => {
