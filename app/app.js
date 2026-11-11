@@ -361,7 +361,7 @@ function makePlayer(scroller, getSlide) {
   const items = [...scroller.children].flatMap((page, slide) =>
     [...page.querySelectorAll("h1, .by, h2, h3, p, li, .takeaway")].map((el) => ({ slide, el })));
   const say = (el) => el.innerText.trim().replace(/\s*·\s*/g, ", ").replace(/\n+/g, ". ");
-  let i = -1, playing = false, token = 0, target = null, lock = null;
+  let i = -1, playing = false, token = 0, target = null, lock = null, utter = null, plain = false;
 
   const bar = document.createElement("div");
   bar.className = "player";
@@ -370,8 +370,10 @@ function makePlayer(scroller, getSlide) {
     <button data-a="next" aria-label="Next paragraph">${ICON.next}</button>
     <button data-a="rate" class="rate" aria-label="Reading speed"></button>
     <select aria-label="Voice"></select>
-    <button data-a="close" class="x" aria-label="Close player">×</button>`;
+    <button data-a="close" class="x" aria-label="Close player">×</button>
+    <div class="hint" hidden></div>`;
   const select = bar.querySelector("select");
+  const hint = (msg) => { const h = bar.querySelector(".hint"); h.textContent = msg; h.hidden = !msg; };
   const fillVoices = () => {
     const v = pickVoice();
     select.innerHTML = englishVoices().map((x) => `<option ${x === v ? "selected" : ""}>${esc(x.name)}</option>`).join("");
@@ -396,15 +398,28 @@ function makePlayer(scroller, getSlide) {
     const top = page.scrollTop + it.el.getBoundingClientRect().top - page.getBoundingClientRect().top - 90;
     page.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
 
-    const u = new SpeechSynthesisUtterance(say(it.el));
-    const v = pickVoice();
-    if (v) { u.voice = v; u.lang = v.lang; }
+    const u = (utter = new SpeechSynthesisUtterance(say(it.el))); // kept referenced so Safari doesn't drop its events
+    const v = !plain && pickVoice();
+    if (v) { u.voice = v; u.lang = v.lang; } else u.lang = "en-AU";
     u.rate = prefs.rate || 1;
     const t = ++token;
+    let started = false;
+    u.onstart = () => { started = true; hint(""); };
     u.onend = () => { if (t === token && playing) speak(i + 1); };
-    u.onerror = (e) => { if (t === token && !["interrupted", "canceled"].includes(e.error)) pause(); };
-    synth.cancel();
-    synth.speak(u);
+    u.onerror = (e) => {
+      if (t !== token || ["interrupted", "canceled"].includes(e.error)) return;
+      if (!plain) return (plain = true), speak(i); // the chosen voice may not be installed; fall back to the system default
+      pause();
+      hint(`Couldn't play audio (${e.error}). Try another voice.`);
+    };
+    // Safari silently drops an utterance queued straight after cancel(), so only cancel when something is playing
+    if (synth.speaking || synth.pending) {
+      synth.cancel();
+      setTimeout(() => t === token && synth.speak(u), 150);
+    } else synth.speak(u);
+    setTimeout(() => {
+      if (t === token && playing && !started) hint("No sound? Turn off Silent mode (the switch on the side of your iPhone) and turn the volume up.");
+    }, 3000);
   }
   async function play() {
     playing = true;
@@ -445,6 +460,7 @@ function makePlayer(scroller, getSlide) {
   });
   select.addEventListener("change", () => {
     prefs.voice = select.value;
+    plain = false;
     applyPrefs();
     if (playing) speak(i);
   });

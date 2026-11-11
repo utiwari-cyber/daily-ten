@@ -176,7 +176,7 @@ a { color: inherit; }
 
 /* Listen */
 .player {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; display: flex; align-items: center; gap: 6px;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
   padding: 10px 12px calc(var(--bottom) + 10px); background: var(--card); border-top: 1px solid var(--line);
   box-shadow: 0 -6px 20px rgba(0,0,0,.08);
 }
@@ -192,3 +192,5 @@ a { color: inherit; }
 .listening .page .in { padding-bottom: calc(var(--bottom) + 130px); }
 .listening .dict { bottom: calc(var(--bottom) + 84px); }
 .speaking { background: color-mix(in srgb, var(--accent) 14%, transparent); box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 14%, transparent); border-radius: 4px; }
+.player .hint { order: -1; flex-basis: 100%; font-size: 13px; line-height: 1.4; color: var(--ink); background: var(--chip); border-radius: 8px; padding: 8px 10px; }
+.player .hint[hidden] { display: none; }
