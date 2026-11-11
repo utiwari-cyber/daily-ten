@@ -44,6 +44,13 @@ jobs:
             git push
           fi
 
+      # Temporary: keep the listening-test audio on the site
+      - uses: actions/cache/restore@v4
+        with:
+          path: app/listen-test
+          key: listen-test-
+          restore-keys: listen-test-
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: app

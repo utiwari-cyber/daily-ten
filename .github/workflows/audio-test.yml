@@ -26,6 +26,11 @@ jobs:
           pip install -q piper-tts
           python3 tools/audio_test.py
           ls -la app/listen-test
+      # Temporary: lets the daily job keep serving the test audio
+      - uses: actions/cache/save@v4
+        with:
+          path: app/listen-test
+          key: listen-test-${{ github.run_id }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: app
