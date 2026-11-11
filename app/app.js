@@ -203,7 +203,7 @@ async function renderReader(date, id, at) {
 
   view.innerHTML = `<div class="reader">
     <div class="rbar"><a class="back" href="#/day/${date}" aria-label="Back">‹</a><div class="rtitle">${esc(b.title)}</div><div class="pno" id="pno"></div>
-      ${synth ? `<button class="ibtn" id="listen" aria-label="Listen">${ICON.listen}</button>` : ""}
+      <button class="ibtn" id="listen" aria-label="Listen" hidden>${ICON.listen}</button>
       <button class="ibtn bm" id="bm" aria-label="Bookmark this page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></button>
       <button class="ibtn" data-settings aria-label="Reading settings">Aa</button></div>
     <div class="dots">${Array.from({ length: SLIDES }, () => "<i></i>").join("")}</div>
@@ -243,8 +243,13 @@ async function renderReader(date, id, at) {
       player?.onSlide(k);
     }
   }, { passive: true });
-  player = synth ? makePlayer(scroller, () => current) : null;
-  document.getElementById("listen")?.addEventListener("click", () => player.toggle());
+  const listen = document.getElementById("listen");
+  listen.addEventListener("click", () => player?.toggle());
+  getAudio(date).then((recs) => { // only books recorded in the last two weeks can be played
+    if (!recs[id] || !listen.isConnected) return;
+    player = makePlayer(scroller, () => current, b, date, recs[id]);
+    listen.hidden = false;
+  });
   reader = { scroller, go: (d) => scroller.scrollTo({ left: (current + d) * scroller.clientWidth, behavior: "smooth" }) };
 }
 
@@ -337,159 +342,132 @@ async function lookup(w) {
   }
 }
 
-// Listen: reads the summary aloud with the device's built-in voices, following along page by page
-const synth = window.speechSynthesis;
+// Listen: plays the recorded narration of the book and keeps the pages in step with it
 const RATES = [0.8, 1, 1.15, 1.3, 1.5, 1.75, 2];
 const ICON = {
   listen: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>`,
   play: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`,
   pause: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>`,
-  prev: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg>`,
-  next: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM6 6l8.5 6L6 18z"/></svg>`,
+  back: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><text x="12" y="15.5" font-size="8" text-anchor="middle" fill="currentColor" stroke="none" font-family="system-ui" font-weight="700">15</text></svg>`,
+  fwd: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/><text x="12" y="15.5" font-size="8" text-anchor="middle" fill="currentColor" stroke="none" font-family="system-ui" font-weight="700">15</text></svg>`,
 };
 let player = null;
+const audioIndex = {};
+const getAudio = (date) => (audioIndex[date] ??= fetch(`audio/${date}/index.json`).then((r) => (r.ok ? r.json() : {})).catch(() => ({})));
+const clock = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
 
-const englishVoices = () => synth.getVoices().filter((v) => /^en([-_]|$)/i.test(v.lang));
-function pickVoice() {
-  const vs = englishVoices();
-  return vs.find((v) => v.name === prefs.voice) || vs.find((v) => /premium|enhanced/i.test(v.name))
-    || vs.find((v) => v.default) || vs.find((v) => v.localService) || vs[0];
-}
-
-function makePlayer(scroller, getSlide) {
-  // One item per heading, paragraph or bullet, so playback can follow the text and skip around
-  const items = [...scroller.children].flatMap((page, slide) =>
-    [...page.querySelectorAll("h1, .by, h2, h3, p, li, .takeaway")].map((el) => ({ slide, el })));
-  const say = (el) => el.innerText.trim().replace(/\s*·\s*/g, ", ").replace(/\n+/g, ". ");
-  let i = -1, playing = false, token = 0, target = null, lock = null, utter = null, plain = false;
+function makePlayer(scroller, getSlide, b, date, rec) {
+  const audio = new Audio(`audio/${date}/${rec.file}`);
+  audio.preload = "metadata";
+  audio.setAttribute("playsinline", "");
+  const posKey = `dt:pos:${b.id}`;
+  const marks = rec.marks;
+  const slideAt = (t) => { let k = 0; while (k + 1 < marks.length && marks[k + 1] <= t + 0.2) k++; return k; };
+  let target = null, lock = null, started = false;
 
   const bar = document.createElement("div");
   bar.className = "player";
-  bar.innerHTML = `<button data-a="prev" aria-label="Previous paragraph">${ICON.prev}</button>
+  bar.innerHTML = `<div class="track"><span class="t" data-t="now">0:00</span>
+      <input type="range" min="0" max="${rec.seconds}" step="1" value="0" aria-label="Position">
+      <span class="t" data-t="left">-${clock(rec.seconds)}</span></div>
+    <button data-a="rate" class="rate" aria-label="Playback speed"></button>
+    <button data-a="back" aria-label="Back 15 seconds">${ICON.back}</button>
     <button data-a="play" class="play" aria-label="Play"></button>
-    <button data-a="next" aria-label="Next paragraph">${ICON.next}</button>
-    <button data-a="rate" class="rate" aria-label="Reading speed"></button>
-    <select aria-label="Voice"></select>
-    <button data-a="close" class="x" aria-label="Close player">×</button>
-    <div class="hint" hidden></div>`;
-  // iOS plays web speech on the ringer channel, so Silent mode mutes it. Asking for media playback
-  // (and keeping a silent track running) moves it to the same channel as music.
-  const keepAlive = new Audio("silence.wav");
-  keepAlive.loop = true;
-  keepAlive.setAttribute("playsinline", "");
-  const select = bar.querySelector("select");
-  const hint = (msg) => { const h = bar.querySelector(".hint"); h.textContent = msg; h.hidden = !msg; };
-  const fillVoices = () => {
-    const v = pickVoice();
-    select.innerHTML = englishVoices().map((x) => `<option ${x === v ? "selected" : ""}>${esc(x.name)}</option>`).join("");
-  };
+    <button data-a="fwd" aria-label="Forward 15 seconds">${ICON.fwd}</button>
+    <button data-a="close" class="x" aria-label="Close player">×</button>`;
+  const range = bar.querySelector("input");
+  let dragging = false;
+
   const sync = () => {
-    bar.querySelector(".play").innerHTML = playing ? ICON.pause : ICON.play;
+    bar.querySelector(".play").innerHTML = audio.paused ? ICON.play : ICON.pause;
     bar.querySelector(".rate").textContent = `${prefs.rate || 1}×`;
   };
-  const mark = (el) => { scroller.querySelector(".speaking")?.classList.remove("speaking"); el?.classList.add("speaking"); };
-
-  function speak(k) {
-    if (k < 0) k = 0;
-    if (k >= items.length) return pause();
-    i = k;
-    const it = items[k];
-    mark(it.el);
-    if (Math.round(scroller.scrollLeft / scroller.clientWidth) !== it.slide) {
-      target = it.slide;
-      scroller.scrollTo({ left: it.slide * scroller.clientWidth, behavior: "smooth" });
+  const tick = () => {
+    const t = audio.currentTime, d = audio.duration || rec.seconds;
+    if (!dragging) range.value = t;
+    bar.querySelector('[data-t="now"]').textContent = clock(t);
+    bar.querySelector('[data-t="left"]').textContent = `-${clock(Math.max(0, d - t))}`;
+    if (t > 1 && d - t > 5) localStorage.setItem(posKey, t.toFixed(1));
+    const k = slideAt(t);
+    if (!audio.paused && k !== getSlide()) { // turn the page when the narration moves on
+      target = k;
+      scroller.scrollTo({ left: k * scroller.clientWidth, behavior: "smooth" });
     }
-    const page = scroller.children[it.slide];
-    const top = page.scrollTop + it.el.getBoundingClientRect().top - page.getBoundingClientRect().top - 90;
-    page.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  };
+  const seek = (t) => { audio.currentTime = Math.max(0, Math.min((audio.duration || rec.seconds) - 0.5, t)); tick(); };
 
-    const u = (utter = new SpeechSynthesisUtterance(say(it.el))); // kept referenced so Safari doesn't drop its events
-    const v = !plain && pickVoice();
-    if (v) { u.voice = v; u.lang = v.lang; } else u.lang = "en-AU";
-    u.rate = prefs.rate || 1;
-    const t = ++token;
-    let started = false;
-    u.onstart = () => { started = true; hint(""); };
-    u.onend = () => { if (t === token && playing) speak(i + 1); };
-    u.onerror = (e) => {
-      if (t !== token || ["interrupted", "canceled"].includes(e.error)) return;
-      if (!plain) return (plain = true), speak(i); // the chosen voice may not be installed; fall back to the system default
-      pause();
-      hint(`Couldn't play audio (${e.error}). Try another voice.`);
-    };
-    // Safari silently drops an utterance queued straight after cancel(), so only cancel when something is playing
-    if (synth.speaking || synth.pending) {
-      synth.cancel();
-      setTimeout(() => t === token && synth.speak(u), 150);
-    } else synth.speak(u);
-    setTimeout(() => {
-      if (t === token && playing && !started) hint("No sound? Turn off Silent mode (the switch on the side of your iPhone) and turn the volume up.");
-    }, 3000);
+  if ("mediaSession" in navigator) {
+    const ms = navigator.mediaSession;
+    ms.metadata = new MediaMetadata({ title: b.title, artist: b.author, album: "Daily Ten",
+      artwork: b.cover ? [{ src: b.cover, sizes: "500x750", type: "image/jpeg" }] : [{ src: "icon-512.png", sizes: "512x512", type: "image/png" }] });
+    ms.setActionHandler("play", () => play());
+    ms.setActionHandler("pause", () => audio.pause());
+    ms.setActionHandler("seekbackward", () => seek(audio.currentTime - 15));
+    ms.setActionHandler("seekforward", () => seek(audio.currentTime + 15));
+    ms.setActionHandler("previoustrack", () => seek(marks[Math.max(0, slideAt(audio.currentTime) - (audio.currentTime - marks[slideAt(audio.currentTime)] < 3 ? 1 : 0))]));
+    ms.setActionHandler("nexttrack", () => { const k = slideAt(audio.currentTime) + 1; if (k < marks.length) seek(marks[k]); });
+    try { ms.setActionHandler("seekto", (e) => seek(e.seekTime)); } catch {}
   }
+
   async function play() {
     if (navigator.audioSession) navigator.audioSession.type = "playback";
-    keepAlive.play().catch(() => {});
-    playing = true;
-    sync();
-    const s = getSlide();
-    speak(items[i]?.slide === s ? i : items.findIndex((x) => x.slide === s));
+    if (!started) {
+      started = true;
+      // Pick up where this book was left, unless the reader has moved to a different page since
+      const saved = +localStorage.getItem(posKey) || 0;
+      const s = getSlide();
+      audio.currentTime = saved && slideAt(saved) === s ? saved : marks[s] || 0;
+    }
+    audio.playbackRate = prefs.rate || 1;
+    await audio.play().catch(() => {});
     try { lock = await navigator.wakeLock?.request("screen"); } catch {} // keep the screen on while listening
   }
-  function pause() {
-    playing = false;
-    token++;
-    synth.cancel();
-    keepAlive.pause();
-    lock?.release().catch(() => {});
-    lock = null;
-    sync();
-  }
+  audio.addEventListener("play", sync);
+  audio.addEventListener("pause", () => { sync(); lock?.release().catch(() => {}); lock = null; });
+  audio.addEventListener("timeupdate", tick);
+  audio.addEventListener("ended", () => localStorage.removeItem(posKey));
+  range.addEventListener("input", () => { dragging = true; bar.querySelector('[data-t="now"]').textContent = clock(+range.value); });
+  range.addEventListener("change", () => { dragging = false; seek(+range.value); });
+
   function destroy() {
-    pause();
-    mark(null);
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
     bar.remove();
     document.body.classList.remove("listening");
+    if ("mediaSession" in navigator) navigator.mediaSession.metadata = null;
   }
 
   bar.addEventListener("click", (e) => {
     const a = e.target.closest("button")?.dataset.a;
-    if (a === "play") playing ? pause() : play();
-    if (a === "prev" || a === "next") {
-      const k = Math.max(0, i) + (a === "next" ? 1 : -1);
-      playing ? speak(k) : ((i = Math.max(0, Math.min(items.length - 1, k))), mark(items[i].el));
-    }
+    if (a === "play") audio.paused ? play() : audio.pause();
+    if (a === "back") seek(audio.currentTime - 15);
+    if (a === "fwd") seek(audio.currentTime + 15);
     if (a === "rate") {
       prefs.rate = RATES[(RATES.indexOf(prefs.rate || 1) + 1) % RATES.length];
       applyPrefs();
+      audio.playbackRate = prefs.rate;
       sync();
-      if (playing) speak(i);
     }
     if (a === "close") destroy();
   });
-  select.addEventListener("change", () => {
-    prefs.voice = select.value;
-    plain = false;
-    applyPrefs();
-    if (playing) speak(i);
-  });
-  synth.onvoiceschanged = fillVoices;
 
   return {
     destroy,
     toggle() {
       if (!bar.isConnected) {
-        fillVoices();
         sync();
         document.body.append(bar);
         document.body.classList.add("listening");
         return play();
       }
-      playing ? pause() : play();
+      audio.paused ? play() : audio.pause();
     },
-    // A manual swipe while listening jumps the narration to that page
+    // A manual swipe jumps the narration to the start of that page
     onSlide(k) {
       if (k === target) return (target = null);
-      if (playing && items[i]?.slide !== k) speak(items.findIndex((x) => x.slide === k));
+      if (!bar.isConnected) return;
+      if (slideAt(audio.currentTime) !== k) { started = true; seek(marks[k]); }
     },
   };
 }

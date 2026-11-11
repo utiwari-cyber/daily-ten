@@ -1,5 +1,5 @@
 // Offline support: everything from the network first, with the cached copy as the offline fallback
-const CACHE = "daily-ten-v6";
+const CACHE = "daily-ten-v7";
 const SHELL = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "icon.svg"];
 
 self.addEventListener("install", (e) => {
@@ -13,6 +13,7 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);
   if (url.origin !== location.origin) return; // covers load straight from Open Library
+  if (url.pathname.endsWith(".mp3")) return; // audio streams in byte ranges, which can't be cached
   e.respondWith(fetch(e.request).then((res) => {
     if (res.ok) caches.open(CACHE).then((c) => c.put(e.request, res.clone()));
     return res;

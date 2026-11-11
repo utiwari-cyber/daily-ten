@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["app/**", "generate.py", "books.txt", ".github/workflows/books.yml", "!app/days/**"]
+    paths: ["app/**", "generate.py", "books.txt", "tools/**", ".github/workflows/books.yml", "!app/days/**"]
 
 permissions:
   contents: write
@@ -20,7 +20,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
@@ -44,12 +44,30 @@ jobs:
             git push
           fi
 
-      # Temporary: keep the listening-test audio on the site
+      # Audio lives in the Actions cache rather than the repo: each run restores the last two weeks,
+      # records any books not yet narrated, and saves the result for the next run
       - uses: actions/cache/restore@v4
         with:
-          path: app/listen-test
-          key: listen-test-
-          restore-keys: listen-test-
+          path: app/audio
+          key: audio-${{ github.run_id }}
+          restore-keys: audio-
+
+      - name: Record audio
+        id: narrate
+        run: |
+          command -v ffmpeg || (sudo apt-get update -q && sudo apt-get install -y -q ffmpeg)
+          pip install -q piper-tts
+          before=$(find app/audio -type f 2>/dev/null | sort | xargs -r md5sum | md5sum)
+          python3 tools/narrate.py
+          after=$(find app/audio -type f | sort | xargs -r md5sum | md5sum)
+          if [ "$before" != "$after" ]; then echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+          du -sh app/audio
+
+      - if: steps.narrate.outputs.changed == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: app/audio
+          key: audio-${{ github.run_id }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
