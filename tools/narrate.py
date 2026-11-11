@@ -25,14 +25,20 @@ PAUSE = 0.6  # seconds between paragraphs
 
 
 def slides(b):
-    """The app's reading order, grouped by slide: title page, ten pages, wrap-up."""
+    """The app's reading order, grouped by slide: title page, ten pages, wrap-up. Older books can lack a field."""
     clean = lambda s: s.replace("**", "")
-    out = [[f"{b['title']}, by {b['author']}.", clean(b["hook"])]]
+    out = [[f"{b['title']}, by {b['author']}."] + ([clean(b["hook"])] if b.get("hook") else [])]
     for n, p in enumerate(b["pages"], 1):
-        out.append([f"Page {n}. {clean(p['title'])}."] + [clean(t) for t in p["paragraphs"]] + [f"Takeaway. {clean(p['takeaway'])}"])
-    out.append(["Key ideas."] + [clean(k) for k in b["key_ideas"]]
-               + ["Try this week."] + [clean(k) for k in b["try_this"]]
-               + [f"Verdict. {clean(b['verdict'])}"])
+        out.append([f"Page {n}. {clean(p.get('title', ''))}."] + [clean(t) for t in p.get("paragraphs", [])]
+                   + ([f"Takeaway. {clean(p['takeaway'])}"] if p.get("takeaway") else []))
+    wrap = []
+    if b.get("key_ideas"):
+        wrap += ["Key ideas."] + [clean(k) for k in b["key_ideas"]]
+    if b.get("try_this"):
+        wrap += ["Try this week."] + [clean(k) for k in b["try_this"]]
+    if b.get("verdict"):
+        wrap.append(f"Verdict. {clean(b['verdict'])}")
+    out.append(wrap or ["The end."])
     return out
 
 
@@ -103,6 +109,10 @@ def main():
         while pending:
             fut = next(as_completed(pending))
             day, bid = pending.pop(fut)
+            if fut.exception():
+                print(f"skipped {day} {bid}: {fut.exception()!r}")
+                submit()
+                continue
             index = AUDIO / day / "index.json"
             done = json.loads(index.read_text()) if index.exists() else {}
             done[bid] = fut.result()
