@@ -2,11 +2,11 @@ name: Daily books
 
 on:
   schedule:
-    - cron: "41 */3 * * *"   # every 3 hours; the first run after midnight Melbourne writes the day, later runs fill any gaps
+    - cron: "17 * * * *"   # hourly: GitHub skips scheduled runs when busy, so try often; a finished day is a quick no-op
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["app/**", "generate.py", "books.txt", "tools/**", ".github/workflows/books.yml", "!app/days/**"]
+    paths: ["app/**", "generate.py", "books.txt", ".github/workflows/books.yml", "!app/days/**"]
 
 permissions:
   contents: write
@@ -20,11 +20,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 40
+    outputs:
+      publish: ${{ steps.save.outputs.publish }}
     steps:
-      # Audio recording stops 48 minutes into the job, leaving time to save and publish
-      - run: echo "NARRATE_DEADLINE=$(( $(date +%s) + 48 * 60 ))" >> "$GITHUB_ENV"
-
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
@@ -38,6 +37,7 @@ jobs:
 
       # Each day is committed so it is only generated once and stays in the archive
       - name: Save new days
+        id: save
         run: |
           git add app/days
           if ! git diff --cached --quiet; then
@@ -45,40 +45,31 @@ jobs:
             git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
             git commit -m "Books for $(TZ=Australia/Melbourne date +%F)"
             git push
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
           fi
 
-      # Audio lives in the Actions cache rather than the repo: each run restores the last two weeks,
-      # records any books not yet narrated, and saves the result for the next run
-      - uses: actions/cache/restore@v4
+      # Recorded audio is kept in the Actions cache by the Audio workflow; publish it alongside the days
+      - if: steps.save.outputs.publish == 'true'
+        uses: actions/cache/restore@v4
         with:
           path: app/audio
           key: audio-${{ github.run_id }}
           restore-keys: audio-
 
-      - name: Record audio
-        id: narrate
-        run: |
-          command -v ffmpeg || (sudo apt-get update -q && sudo apt-get install -y -q ffmpeg)
-          pip install -q piper-tts
-          before=$(find app/audio -type f 2>/dev/null | sort | xargs -r md5sum | md5sum)
-          python3 -u tools/narrate.py
-          after=$(find app/audio -type f | sort | xargs -r md5sum | md5sum)
-          if [ "$before" != "$after" ]; then echo "changed=true" >> "$GITHUB_OUTPUT"; fi
-          du -sh app/audio
-
-      - if: steps.narrate.outputs.changed == 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: app/audio
-          key: audio-${{ github.run_id }}
-
-      - uses: actions/upload-pages-artifact@v3
+      - if: steps.save.outputs.publish == 'true'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: app
 
   deploy:
     needs: build
+    if: needs.build.outputs.publish == 'true'
     runs-on: ubuntu-latest
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

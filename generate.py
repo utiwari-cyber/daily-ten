@@ -80,7 +80,7 @@ def gemini(book, key, models):
                 last = ex
                 if ex.code not in (429, 500, 503):
                     break
-            except (TimeoutError, urllib.error.URLError, ValueError, KeyError) as ex:
+            except (OSError, ValueError, KeyError, TypeError, AttributeError) as ex:  # dropped connections, malformed answers
                 last = ex
     raise last
 
