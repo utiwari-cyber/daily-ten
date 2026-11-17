@@ -73,6 +73,8 @@ def gemini(book, key, models):
     last = None
     for model in models:
         for wait in (0, 15, 45):
+            if time.time() + wait > DEADLINE:
+                raise TimeoutError("out of time for this run")
             time.sleep(wait)
             try:
                 return check(gemini_call(book, key, model))
@@ -103,7 +105,7 @@ def check(s):
     if len(s.get("pages", [])) != 10 or not all(p.get("paragraphs") and p.get("title") for p in s["pages"]):
         raise ValueError(f"expected 10 full pages, got {len(s.get('pages', []))}")
     words = sum(len(" ".join(p["paragraphs"]).split()) for p in s["pages"])
-    if words < 1800:
+    if words < 1200:
         raise ValueError(f"summary too short ({words} words)")
     s["words"] = words
     s["minutes"] = round(words / 230)
@@ -130,6 +132,18 @@ def slug(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")[:60]
 
 
+DEADLINE = time.time() + float(os.environ.get("WRITE_MINUTES", "25")) * 60  # stop in time to save what's done
+
+
+def save(path, date, books):
+    path.write_text(json.dumps({"date": date, "books": books}, ensure_ascii=False, indent=1))
+    index = {}
+    for f in sorted(DAYS.glob("20*.json"), reverse=True):
+        d = json.loads(f.read_text())
+        index[d["date"]] = [{"id": b["id"], "title": b["title"], "author": b["author"], "genre": b["genre"]} for b in d["books"]]
+    (DAYS / "index.json").write_text(json.dumps({"days": index}, ensure_ascii=False))
+
+
 def main():
     key = os.environ.get("GEMINI_API_KEY")
     models = os.environ.get("GEMINI_MODELS", "gemini-flash-latest,gemini-2.5-flash,gemini-flash-lite-latest").split(",")
@@ -139,6 +153,7 @@ def main():
     day = json.loads(path.read_text()) if path.exists() else {"date": date, "books": []}
     done = {b["id"]: b for b in day["books"] if b.get("pages")}
 
+    DAYS.mkdir(parents=True, exist_ok=True)
     picks = pick((today - EPOCH).days, load_books())
     books, failed = [], []
     for b in picks:
@@ -156,16 +171,11 @@ def main():
             failed.append(b["title"])
             continue
         books.append({"id": bid, **b, **cover(b), **summary})
+        save(path, date, books + [x for x in done.values() if x not in books])  # keep progress if the job is stopped
         print(f"ok: {b['title']} ({summary['words']} words)")
         time.sleep(7)
 
-    DAYS.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps({"date": date, "books": books}, ensure_ascii=False, indent=1))
-    index = {}
-    for f in sorted(DAYS.glob("20*.json"), reverse=True):
-        d = json.loads(f.read_text())
-        index[d["date"]] = [{"id": b["id"], "title": b["title"], "author": b["author"], "genre": b["genre"]} for b in d["books"]]
-    (DAYS / "index.json").write_text(json.dumps({"days": index}, ensure_ascii=False))
+    save(path, date, books)
     print(f"{date}: {len(books)} books, {len(failed)} failed")
 
 
